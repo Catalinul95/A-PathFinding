@@ -31,35 +31,18 @@ const map = [
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-	[0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-	[0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-	[0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-	[0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-	[0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-	[0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-	[0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-	[0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-	[0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 ];
-const aStar = new AStar();
-aStar.setMap(map);
-aStar.setStartNodeById(2);
-aStar.setFinalNodeById(3);
-aStar.setCollisionNodeIds([1]);
-aStar.setCurrentNode()
-aStar.setDiagonalSideNodesCheck(true);
-
-aStar.findPath();
-aStar.buildPath();
-const path = aStar.getPath();
-
-for (let i = 0; i < path.length; i++) {
-	if (map[path[i].row][path[i].column] == 0) {
-		map[path[i].row][path[i].column] = 9;
-	}
-}
 
 function drawGrid(context, grid_rows, grid_cols, tile_size) {
 	context.lineWidth = 2;
@@ -69,7 +52,7 @@ function drawGrid(context, grid_rows, grid_cols, tile_size) {
     context.shadowColor   = "#ccc";
 
     for (let i = 0; i <= grid_cols; i++) {
-      context.strokeStyle = '#3FC380';
+      context.strokeStyle = '#999';
       context.beginPath();
       context.moveTo(tile_size * i, 0);
       context.lineTo(tile_size * i, tile_size * grid_rows);
@@ -77,7 +60,7 @@ function drawGrid(context, grid_rows, grid_cols, tile_size) {
     }
 
     for (let j = 0; j <= grid_rows; j++) {
-      context.strokeStyle = '#3FC380';
+      context.strokeStyle = '#999';
       context.beginPath();
       context.moveTo(0, tile_size * j);
       context.lineTo(tile_size * grid_cols, tile_size * j);
@@ -99,9 +82,68 @@ function drawMap(map, context, grid_rows, grid_cols, tile_size) {
 	}
 }
 
+function getTile(x, y) {
+	let row = Math.floor((y * map.length) / 600);
+	let column = Math.floor((x * map[0].length) / 800) - 8;
+	
+	return {row: row, column: column};
+}
 
-drawMap(map, context, map.length, map[0].length, 40);
+
 drawGrid(context, map.length, map[0].length, 40);
+
+const nodeSelecter = document.getElementById('nodeSelect');
+let nodeType = nodeSelecter.value;
+
+nodeSelecter.addEventListener('change', function (e) {
+	nodeType = this.value;
+});
+
+canvas.addEventListener('click', function (e) {
+	let node = getTile(e.clientX, e.clientY);
+
+	map[node.row][node.column] = parseInt(nodeType);
+
+	context.clearRect(0, 0, 800, 600);
+	drawGrid(context, map.length, map[0].length, 40);
+	drawMap(map, context, map.length, map[0].length, 40);
+	
+});
+
+document.getElementById('generatePath').addEventListener('click', function () {
+	const aStar = new AStar();
+	aStar.setMap(map);
+	aStar.setStartNodeById(2);
+	aStar.setFinalNodeById(3);
+	aStar.setCollisionNodeIds([1]);
+	aStar.setCurrentNode();
+	aStar.setDiagonalSideNodesCheck(true);
+
+	aStar.findPath();
+	aStar.buildPath();
+	const path = aStar.getPath();
+
+	for (let i = 0; i < path.length; i++) {
+		if (map[path[i].row][path[i].column] == 0) {
+			map[path[i].row][path[i].column] = 9;
+		}
+	}
+
+	context.clearRect(0, 0, 800, 600);
+	drawGrid(context, map.length, map[0].length, 40);
+	drawMap(map, context, map.length, map[0].length, 40);
+});
+
+document.getElementById('reset').addEventListener('click', function () {
+	for (let row = 0; row < map.length; row++) {
+		for (let column = 0; column < map[0].length; column++) {
+			map[row][column] = 0;
+		}
+	}
+	context.clearRect(0, 0, 800, 600);
+	drawGrid(context, map.length, map[0].length, 40);
+	drawMap(map, context, map.length, map[0].length, 40);
+});
 
 
 

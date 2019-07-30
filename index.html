@@ -7,12 +7,30 @@
 			display: block;
 			margin: 0 auto;
 			border: 1px solid #333;
-			background-color: #222;
+			background-color: #eee;
+		}
+
+		.container {
+			width: 800px;
+			margin: 0 auto;
+		}
+
+		select {
+			margin-top: 10px;
 		}
 	</style>
 </head>
 <body>
-	<canvas id="screen" width="800" height="600"></canvas>
+	<div class="container">
+		<canvas id="screen" width="800" height="600"></canvas>
+		<select id="nodeSelect">
+			<option value="2" selected>Starting Node</option>
+			<option value="3">End Node</option>
+			<option value="1">Wall</option>
+		</select>
+		<button id="reset">Reset</button>
+		<button id="generatePath">Generate Path</button>
+	</div>
 	<script src="AStar.js"></script>
 	<script src="main.js"></script>
 </body>

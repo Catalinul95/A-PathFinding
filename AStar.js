@@ -18,7 +18,7 @@ class AStar
 	}
 	getNodeById(id)
 	{
-		let node = {};
+		let node;
 		for (let row = 0; row < this.map.length; row++) {
 			for (let column = 0; column < this.map[0].length; column++) {
 				if (this.map[row][column] === id) {
@@ -32,6 +32,9 @@ class AStar
 					};
 				}
 			}
+		}
+		if (!node) {
+			throw new Error('Node could not be found using this id: ' + id);
 		}
 		return node;
 	}

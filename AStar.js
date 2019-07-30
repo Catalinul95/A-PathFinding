@@ -10,6 +10,7 @@ class AStar
 		this.finalNode;
 		this.collisionNodeIds = [];
 		this.path = [];
+		this.diagonalNodesNoSideCollision = false;
 	}
 	setMap(map) 
 	{
@@ -121,6 +122,45 @@ class AStar
 
 		return bestNode;
 	}
+	setDiagonalSideNodesCheck(bool) 
+	{
+		this.diagonalNodesNoSideCollision = bool;
+	}
+	checkCollisionWhenDiagonalNode(column, row, adjacentNode) 
+	{
+		if (!this.diagonalNodesNoSideCollision) {
+			return false;
+		}
+
+		// diagonal movement is blocked if collision square is on sides
+		if (column == 2 && row == 0 && this.getNode(adjacentNode.row + 1, adjacentNode.column).id == 1) {
+			return true;
+		}
+		if (column == 2 && row == 0 && this.getNode(adjacentNode.row, adjacentNode.column - 1).id == 1) {
+			return true;
+		}
+
+		if (column == 0 && row == 0 && this.getNode(adjacentNode.row + 1, adjacentNode.column).id == 1) {
+			return true;
+		}
+		if (column == 0 && row == 0 && this.getNode(adjacentNode.row , adjacentNode.column + 1).id == 1) {
+			return true;
+		}
+
+		if (column == 2 && row == 2 && this.getNode(adjacentNode.row, adjacentNode.column - 1).id == 1) {
+			return true;
+		}
+		if (column == 2 && row == 2 && this.getNode(adjacentNode.row -1 , adjacentNode.column).id == 1) {
+			return true;
+		}
+
+		if (column == 0 && row == 2 && this.getNode(adjacentNode.row, adjacentNode.column + 1).id == 1) {
+			return true;
+		}
+		if (column == 0 && row == 2 && this.getNode(adjacentNode.row - 1, adjacentNode.column).id == 1) {
+			return true;
+		}
+	}
 	getAdjacentNodes()
 	{
 		const node = {};
@@ -137,6 +177,11 @@ class AStar
 					if (this.collisionNodeIds.indexOf(adjacentNode.id) > -1) {
 						continue;
 					}
+
+					if (this.checkCollisionWhenDiagonalNode(column, row, adjacentNode)) {
+						continue;
+					}
+
 
 					for (let i = 0; i < this.openList.length; i++) {
 						if ((node.row + row) === this.openList[i].row && (node.column + column)  === this.openList[i].column) {

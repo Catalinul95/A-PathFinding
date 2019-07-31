@@ -11,6 +11,7 @@ class AStar
 		this.collisionNodeIds = [];
 		this.path = [];
 		this.diagonalNodesNoSideCollision = false;
+		this.diagonalNode = false;
 	}
 	setMap(map) 
 	{
@@ -129,6 +130,10 @@ class AStar
 	{
 		this.diagonalNodesNoSideCollision = bool;
 	}
+	setDiagonalNodes(bool) 
+	{
+		this.diagonalNode = bool
+	}
 	checkCollisionWhenDiagonalNode(column, row, adjacentNode) 
 	{
 		if (!this.diagonalNodesNoSideCollision) {
@@ -176,6 +181,12 @@ class AStar
 			for (let column = 0; column < 3; column++) {
 				try {
 					adjacentNode = this.getNode(node.row + row, node.column + column);
+
+					if (!this.diagonalNode) {
+						if ((column == 0 || column == 2) && (row == 0 || row == 2)) {
+							continue;
+						}
+					}
 
 					if (this.collisionNodeIds.indexOf(adjacentNode.id) > -1) {
 						continue;

@@ -118,6 +118,7 @@ document.getElementById('generatePath').addEventListener('click', function () {
 	aStar.setCollisionNodeIds([1]);
 	aStar.setCurrentNode();
 	aStar.setDiagonalSideNodesCheck(true);
+	aStar.setDiagonalNodes(false);
 
 	aStar.findPath();
 	aStar.buildPath();

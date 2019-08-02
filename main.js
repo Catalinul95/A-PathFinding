@@ -84,7 +84,9 @@ function drawMap(map, context, grid_rows, grid_cols, tile_size) {
 
 function getTile(x, y) {
 	let row = Math.floor((y * map.length) / 600);
-	let column = Math.floor((x * map[0].length) / 800) - 8;
+	let column = Math.floor((x * map[0].length) / 800) ;
+
+	console.log(x);
 	
 	return {row: row, column: column};
 }
@@ -100,7 +102,8 @@ nodeSelecter.addEventListener('change', function (e) {
 });
 
 canvas.addEventListener('click', function (e) {
-	let node = getTile(e.clientX, e.clientY);
+	var rect = e.target.getBoundingClientRect();
+	let node = getTile(e.clientX - rect.left, e.clientY - rect.top);
 
 	map[node.row][node.column] = parseInt(nodeType);
 
